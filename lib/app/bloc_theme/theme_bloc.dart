@@ -5,7 +5,7 @@ import 'package:prince_portfolio/app/bloc_theme/theme_bloc_event.dart';
 import 'package:prince_portfolio/app/bloc_theme/thme_bloc_state.dart';
 
 class ThemeBloc extends Bloc<ThemeBlocEvent, ThemeBlocState> {
-  ThemeBloc() : super(ThemeBlocStateLight()) {
+  ThemeBloc() : super(ThemeBlocStateDark()) {
     on<ThemeEventLight>(_actionToggleTheme);
   }
 
