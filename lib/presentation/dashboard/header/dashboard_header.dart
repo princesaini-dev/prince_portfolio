@@ -19,8 +19,7 @@ class DashboardHeader extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget _headerOptions(BuildContext context) {
-    return Expanded(
-        child: Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: _getOptionsList()
@@ -39,7 +38,7 @@ class DashboardHeader extends StatelessWidget implements PreferredSizeWidget {
                 ),
               )))
           .toList(),
-    ));
+    );
   }
 
   Widget _themeToggleButton(BuildContext context) {
