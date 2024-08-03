@@ -8,4 +8,12 @@ class StringManager {
   static const String contact = 'Contact';
   static const String blog = 'Blog';
   static const String resume = 'Resume';
+
+  ///
+  /// Social Media Links
+  ///
+  static const String linkedinUrl = 'https://www.linkedin.com/in/prince-dev';
+  static const String githubUrl = 'https://github.com/princesaini-dev';
+  static const String instagramUrl =
+      'https://www.instagram.com/princesaini3103/';
 }
