@@ -8,6 +8,7 @@ class StringManager {
   static const String contact = 'Contact';
   static const String blog = 'Blog';
   static const String resume = 'Resume';
+  static const String darkMode = 'Dark mode';
 
   ///
   /// Social Media Links

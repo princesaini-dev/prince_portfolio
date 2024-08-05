@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 class ColorManager {
   static const Color primaryBlack = Color(0xFF000000);
   static const Color primaryWhite = Color(0xFFFFFFFF);
-  static const Color secondaryBlack = Color(0xFF333333);
-  static const Color secondaryWhite = Color(0xFFEEEEEE);
+  static const Color grey = Color.fromARGB(255, 38, 38, 38);
 
   static Color blackColor(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark
@@ -18,15 +17,9 @@ class ColorManager {
         : primaryWhite;
   }
 
-  static Color secondaryBlackColor(BuildContext context) {
+  static Color greyColor(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark
-        ? secondaryWhite
-        : secondaryBlack;
-  }
-
-  static Color secondaryWhiteColor(BuildContext context) {
-    return Theme.of(context).brightness == Brightness.dark
-        ? secondaryBlack
-        : secondaryWhite;
+        ? grey
+        : primaryWhite;
   }
 }
