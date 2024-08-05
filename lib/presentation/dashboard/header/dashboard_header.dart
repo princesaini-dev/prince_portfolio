@@ -8,15 +8,17 @@ import 'package:prince_portfolio/presentation/resources/string_manager.dart';
 import 'package:prince_portfolio/utils/responsive.dart';
 
 class DashboardHeader extends StatelessWidget implements PreferredSizeWidget {
-  const DashboardHeader({super.key});
+  final Function() onMenuButtonPressed;
+  const DashboardHeader({required this.onMenuButtonPressed, super.key});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      backgroundColor: ColorManager.whiteColor(context),
       leading: Responsive.isDesktop(context)
           ? const SizedBox.shrink()
           : IconButton(
-              onPressed: () {},
+              onPressed: onMenuButtonPressed,
               icon: Icon(
                 Icons.menu,
                 color: ColorManager.blackColor(context),
