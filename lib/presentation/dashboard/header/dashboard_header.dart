@@ -3,13 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prince_portfolio/app/bloc_theme/theme_bloc.dart';
 import 'package:prince_portfolio/app/bloc_theme/theme_bloc_event.dart';
 import 'package:prince_portfolio/app/bloc_theme/thme_bloc_state.dart';
+import 'package:prince_portfolio/presentation/dashboard/header/menu_items.dart';
 import 'package:prince_portfolio/presentation/resources/color_manager.dart';
-import 'package:prince_portfolio/presentation/resources/string_manager.dart';
 import 'package:prince_portfolio/utils/responsive.dart';
 
 class DashboardHeader extends StatelessWidget implements PreferredSizeWidget {
   final Function() onMenuButtonPressed;
-  const DashboardHeader({required this.onMenuButtonPressed, super.key});
+  final Function(int index) onOptionClick;
+  const DashboardHeader(
+      {required this.onMenuButtonPressed,
+      required this.onOptionClick,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,16 +38,20 @@ class DashboardHeader extends StatelessWidget implements PreferredSizeWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: _getOptionsList()
-          .map((e) => TextButton(
-              onPressed: () {},
+      children: MenuItems.menuItems
+          .asMap()
+          .entries
+          .map((item) => TextButton(
+              onPressed: () {
+                onOptionClick(item.key);
+              },
               style: TextButton.styleFrom(
                   foregroundColor:
                       ColorManager.blackColor(context).withOpacity(.5)),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14),
                 child: Text(
-                  e.toUpperCase(),
+                  item.value.title.toUpperCase(),
                   style: TextStyle(
                       color: ColorManager.blackColor(context),
                       fontWeight: FontWeight.w500),
@@ -74,16 +82,4 @@ class DashboardHeader extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-
-  List<String> _getOptionsList() {
-    List<String> list = [];
-    list.add(StringManager.home);
-    list.add(StringManager.about);
-    list.add(StringManager.services);
-    list.add(StringManager.projects);
-    list.add(StringManager.contact);
-    list.add(StringManager.blog);
-    list.add(StringManager.resume);
-    return list;
-  }
 }
