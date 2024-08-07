@@ -3,12 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prince_portfolio/app/bloc_theme/theme_bloc.dart';
 import 'package:prince_portfolio/app/bloc_theme/theme_bloc_event.dart';
 import 'package:prince_portfolio/app/bloc_theme/thme_bloc_state.dart';
+import 'package:prince_portfolio/presentation/dashboard/header/menu_items.dart';
 import 'package:prince_portfolio/presentation/resources/color_manager.dart';
 import 'package:prince_portfolio/presentation/resources/string_manager.dart';
 import 'package:prince_portfolio/utils/extention_context.dart';
 
 class DrawerWidget extends StatelessWidget {
-  const DrawerWidget({super.key});
+  final Function(int index) onMenuButtonPressed;
+  const DrawerWidget({required this.onMenuButtonPressed, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,21 +19,61 @@ class DrawerWidget extends StatelessWidget {
       backgroundColor: ColorManager.greyColor(context),
       elevation: 10,
       shadowColor: ColorManager.greyColor(context),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 100,
-          ),
-          Divider(
-            color: ColorManager.blackColor(context).withOpacity(.4),
-          ),
-          _themeModeButton(context),
-          Divider(
-            color: ColorManager.blackColor(context).withOpacity(.4),
-          ),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 100,
+            ),
+            Divider(
+              color: ColorManager.blackColor(context).withOpacity(.4),
+            ),
+            _themeModeButton(context),
+            Divider(
+              color: ColorManager.blackColor(context).withOpacity(.4),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: MenuItems.menuItems
+                    .asMap()
+                    .entries
+                    .map((item) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: TextButton.icon(
+                            style: TextButton.styleFrom(
+                                foregroundColor:
+                                    ColorManager.blackColor(context)
+                                        .withOpacity(.5)),
+                            onPressed: () {
+                              onMenuButtonPressed(item.key);
+                            },
+                            icon: Icon(item.value.icon,
+                                size: 20,
+                                color: ColorManager.blackColor(context)),
+                            label: SizedBox(
+                              width: context.width,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Text(
+                                  item.value.title.toUpperCase(),
+                                  style: TextStyle(
+                                      color: ColorManager.blackColor(context),
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ))
+                    .toList(),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

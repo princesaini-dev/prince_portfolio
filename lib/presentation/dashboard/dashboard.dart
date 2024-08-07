@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:prince_portfolio/presentation/dashboard/components/about_me/about_me.dart';
+import 'package:prince_portfolio/presentation/dashboard/components/contact/contact_me.dart';
 import 'package:prince_portfolio/presentation/dashboard/drawer/drawer.dart';
 import 'package:prince_portfolio/presentation/dashboard/header/dashboard_header.dart';
-import 'package:prince_portfolio/presentation/dashboard/user_detail/user_detail.dart';
+import 'package:prince_portfolio/presentation/dashboard/components/user_detail/user_detail.dart';
 import 'package:prince_portfolio/presentation/resources/color_manager.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -12,7 +15,8 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final ItemScrollController _scrollController = ItemScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -22,25 +26,48 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: Scaffold(
           key: _scaffoldKey,
           backgroundColor: ColorManager.whiteColor(context),
-          drawer: const DrawerWidget(),
+          drawer: DrawerWidget(
+            onMenuButtonPressed: (index) {
+              _closeDrawer();
+              _scrollToIndex(scrollToIndex: index);
+            },
+          ),
           appBar: DashboardHeader(
             onMenuButtonPressed: () {
               _openDrawer();
             },
+            onOptionClick: (index) {
+              _scrollToIndex(scrollToIndex: index);
+            },
           ),
-          body: const SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [UserDetail(), UserDetail()],
-            ),
+          body: ScrollablePositionedList.builder(
+            itemScrollController: _scrollController,
+            itemCount: dashboardWidgetList.length,
+            itemBuilder: (context, index) {
+              return dashboardWidgetList[index];
+            },
           ),
         ),
       ),
     );
   }
 
+  List<Widget> dashboardWidgetList = [
+    const UserDetail(),
+    AboutMe(),
+    ContactMe()
+  ];
+
+  void _scrollToIndex({required int scrollToIndex}) {
+    _scrollController.scrollTo(
+        index: scrollToIndex, duration: const Duration(seconds: 1));
+  }
+
   void _openDrawer() {
     _scaffoldKey.currentState?.openDrawer();
+  }
+
+  void _closeDrawer() {
+    _scaffoldKey.currentState?.closeDrawer();
   }
 }

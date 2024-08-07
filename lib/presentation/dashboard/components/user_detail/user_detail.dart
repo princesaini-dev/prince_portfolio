@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:prince_portfolio/presentation/dashboard/user_detail/hand_wave_animation.dart';
-import 'package:prince_portfolio/presentation/dashboard/user_detail/welcome_animation.dart';
+import 'package:prince_portfolio/presentation/dashboard/components/user_detail/hand_wave_animation.dart';
+import 'package:prince_portfolio/presentation/dashboard/components/user_detail/welcome_animation.dart';
 import 'package:prince_portfolio/presentation/resources/color_manager.dart';
 import 'package:prince_portfolio/presentation/resources/image_manager.dart';
 import 'package:prince_portfolio/presentation/resources/string_manager.dart';
@@ -15,7 +15,7 @@ class UserDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: context.height * .9,
+        height: context.height,
         width: context.width,
         child: Responsive.isDesktop(context)
             ? _usernameForDesktop(context)
@@ -48,7 +48,7 @@ class UserDetail extends StatelessWidget {
                       StringManager.welcomeToMyPortfolio.toUpperCase(),
                       style: TextStyle(
                           color: ColorManager.blackColor(context),
-                          letterSpacing: 2,
+                          letterSpacing: 5,
                           fontSize: 14,
                           fontWeight: FontWeight.w500),
                     ),
@@ -56,15 +56,26 @@ class UserDetail extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 30,
                 ),
                 Text(
                   StringManager.princeSaini.toUpperCase(),
                   style: TextStyle(
                       color: ColorManager.blackColor(context),
                       letterSpacing: 2,
-                      fontSize: 44,
+                      fontSize: 52,
                       fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Text(
+                  StringManager.flutterDeveloper.toUpperCase(),
+                  style: TextStyle(
+                      color: ColorManager.blackColor(context),
+                      letterSpacing: 2,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(
                   height: 80,
@@ -98,7 +109,7 @@ class UserDetail extends StatelessWidget {
                       StringManager.welcomeToMyPortfolio.toUpperCase(),
                       style: TextStyle(
                           color: ColorManager.blackColor(context),
-                          letterSpacing: 4,
+                          letterSpacing: 6,
                           fontSize: 16,
                           fontWeight: FontWeight.w500),
                     ),
@@ -106,18 +117,29 @@ class UserDetail extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 30,
                 ),
                 Text(
                   StringManager.princeSaini.toUpperCase(),
                   style: TextStyle(
                       color: ColorManager.blackColor(context),
                       letterSpacing: 6,
-                      fontSize: 48,
+                      fontSize: 58,
                       fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(
-                  height: 80,
+                  height: 30,
+                ),
+                Text(
+                  StringManager.flutterDeveloper,
+                  style: TextStyle(
+                      color: ColorManager.blackColor(context),
+                      letterSpacing: 4,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(
+                  height: 100,
                 ),
                 _socialMediaLinks(context)
               ],
