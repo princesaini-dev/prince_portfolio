@@ -22,4 +22,8 @@ class ColorManager {
         ? grey
         : primaryWhite;
   }
+
+  static Color redColor(BuildContext context) {
+    return Colors.red;
+  }
 }

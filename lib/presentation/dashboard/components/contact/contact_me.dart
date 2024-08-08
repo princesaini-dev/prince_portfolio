@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prince_portfolio/presentation/base/custom_text_widget.dart';
+import 'package:prince_portfolio/presentation/resources/color_manager.dart';
 import 'package:prince_portfolio/presentation/resources/string_manager.dart';
 import 'package:prince_portfolio/utils/extention_context.dart';
 import 'package:prince_portfolio/utils/responsive.dart';
@@ -11,14 +12,15 @@ class ContactMe extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding:
-          EdgeInsets.symmetric(horizontal: context.width * .15, vertical: 25),
+          EdgeInsets.symmetric(horizontal: context.width * 0.08, vertical: 25),
       child: GridView.count(
         crossAxisCount: Responsive.isMobile(context) ? 1 : 2,
         shrinkWrap: true,
         crossAxisSpacing: 25,
+        childAspectRatio: (1 / .6),
         mainAxisSpacing: 25,
         children: _contactMenuList.asMap().entries.map((item) {
-          return _contectItemView(_contactMenuList[item.key]);
+          return _contectItemView(_contactMenuList[item.key], context);
         }).toList(),
       ),
     );
@@ -27,7 +29,7 @@ class ContactMe extends StatelessWidget {
   ///
   /// Contact Item View for contact me section
   ///
-  Widget _contectItemView(ContactMenu contactMenu) {
+  Widget _contectItemView(ContactMenu contactMenu, BuildContext context) {
     return Card(
       elevation: 4,
       child: Column(
@@ -36,7 +38,7 @@ class ContactMe extends StatelessWidget {
         children: [
           Icon(
             contactMenu.icon,
-            color: Colors.red,
+            color: ColorManager.redColor(context),
             size: 32,
           ),
           const SizedBox(

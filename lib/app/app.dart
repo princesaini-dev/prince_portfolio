@@ -5,24 +5,15 @@ import 'package:prince_portfolio/app/bloc_theme/thme_bloc_state.dart';
 import 'package:prince_portfolio/presentation/resources/routes_manager.dart';
 
 class MyApp extends StatefulWidget {
-  const MyApp._internal(); // private named constructor
-  final int appState = 0;
-  static const MyApp instance =
-      MyApp._internal(); // single instance -- singleton
-
-  factory MyApp() => instance; // factory for the class instance
+  const MyApp({super.key});
 
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-//  AppPreferences _appPreferences = instance<AppPreferences>();
-
   @override
   void didChangeDependencies() {
-    //  _appPreferences.getLocal().then((local) => {context.setLocale(local)});
-
     super.didChangeDependencies();
   }
 

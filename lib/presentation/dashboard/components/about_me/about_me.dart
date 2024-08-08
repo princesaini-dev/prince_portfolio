@@ -101,9 +101,9 @@ class AboutMe extends StatelessWidget {
         const SizedBox(
           height: 20,
         ),
-        const CustomTextWidget(
+        CustomTextWidget(
           text: StringManager.whoAmI,
-          color: Colors.red,
+          color: ColorManager.redColor(context),
           fontSize: 18,
         ),
         const SizedBox(
@@ -131,16 +131,16 @@ class AboutMe extends StatelessWidget {
         const SizedBox(
           height: 16,
         ),
-        const CustomTextWidget(
+        CustomTextWidget(
           text: StringManager.technologyWorkedWith,
-          color: Colors.red,
+          color: ColorManager.redColor(context),
           latterSpacing: 2,
           fontSize: 18,
         ),
         const SizedBox(
           height: 12,
         ),
-        _technologyWidget()
+        _technologyWidget(context)
       ],
     );
   }
@@ -148,7 +148,7 @@ class AboutMe extends StatelessWidget {
   ///
   /// This function will return the list of technology
   ///
-  Widget _technologyWidget() {
+  Widget _technologyWidget(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -158,10 +158,10 @@ class AboutMe extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Icon(
+              Icon(
                 Icons.forward,
                 size: 20,
-                color: Colors.red,
+                color: ColorManager.redColor(context),
               ),
               const SizedBox(
                 width: 10,
