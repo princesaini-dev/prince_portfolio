@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prince_portfolio/presentation/dashboard/components/about_me/about_me.dart';
 import 'package:prince_portfolio/presentation/dashboard/components/contact/contact_me.dart';
+import 'package:prince_portfolio/presentation/dashboard/components/projects/projects.dart';
 import 'package:prince_portfolio/presentation/dashboard/components/resume/resume.dart';
 import 'package:prince_portfolio/presentation/dashboard/drawer/drawer.dart';
 import 'package:prince_portfolio/presentation/dashboard/header/dashboard_header.dart';
@@ -56,6 +57,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   List<Widget> dashboardWidgetList = [
     const UserDetail(),
     AboutMe(),
+    const Projects(),
     ContactMe(),
     const MyResume()
   ];

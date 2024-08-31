@@ -13,15 +13,31 @@ class ContactMe extends StatelessWidget {
     return Padding(
       padding:
           EdgeInsets.symmetric(horizontal: context.width * 0.08, vertical: 25),
-      child: GridView.count(
-        crossAxisCount: Responsive.isMobile(context) ? 1 : 2,
-        shrinkWrap: true,
-        crossAxisSpacing: 25,
-        childAspectRatio: (1 / .6),
-        mainAxisSpacing: 25,
-        children: _contactMenuList.asMap().entries.map((item) {
-          return _contectItemView(_contactMenuList[item.key], context);
-        }).toList(),
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 25,
+          ),
+          const CustomTextWidget(
+            text: StringManager.contact,
+            latterSpacing: 4,
+            fontSize: 42,
+            fontWeight: FontWeight.w500,
+          ),
+          const SizedBox(
+            height: 25,
+          ),
+          GridView.count(
+            crossAxisCount: Responsive.isMobile(context) ? 1 : 2,
+            shrinkWrap: true,
+            crossAxisSpacing: 25,
+            childAspectRatio: (1 / .6),
+            mainAxisSpacing: 25,
+            children: _contactMenuList.asMap().entries.map((item) {
+              return _contectItemView(_contactMenuList[item.key], context);
+            }).toList(),
+          ),
+        ],
       ),
     );
   }
