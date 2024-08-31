@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:prince_portfolio/presentation/base/custom_text_widget.dart';
 import 'package:prince_portfolio/presentation/resources/color_manager.dart';
 import 'package:prince_portfolio/presentation/resources/string_manager.dart';
+import 'package:prince_portfolio/utils/app_utills.dart';
 import 'package:prince_portfolio/utils/extention_context.dart';
 import 'package:prince_portfolio/utils/responsive.dart';
-import 'dart:html' as html;
-import 'package:http/http.dart' as http;
 
 class MyResume extends StatelessWidget {
   const MyResume({super.key});
@@ -137,9 +136,6 @@ class MyResume extends StatelessWidget {
   }
 
   Future<void> downloadResume() async {
-    html.AnchorElement anchorElement =
-        html.AnchorElement(href: StringManager.resumeDownloadUrl);
-    anchorElement.download = 'My Resume';
-    anchorElement.click();
+    AppUtills.loadUrl(StringManager.resumeDownloadUrl);
   }
 }
