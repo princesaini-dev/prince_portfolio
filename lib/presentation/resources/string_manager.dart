@@ -21,7 +21,7 @@ class StringManager {
       'Are you sure want to download resume?';
   static const String myResume = 'My Resume';
   static const String resumeDownloadUrl =
-      'https://drive.google.com/file/d/1H2TjZwWVn3FcRz9_e1T75Ao22sL9_d6S/view?usp=sharing';
+      'https://drive.google.com/file/d/1-xIxpu8H7BN58hZXwk_JXDeonCTC7gIL/view?usp=sharing';
 
   ///
   /// Contact me section
