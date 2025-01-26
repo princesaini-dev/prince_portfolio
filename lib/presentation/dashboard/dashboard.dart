@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prince_portfolio/app/bloc_theme/theme_bloc.dart';
+import 'package:prince_portfolio/app/bloc_theme/thme_bloc_state.dart';
+import 'package:prince_portfolio/data/portfolio_data_model.dart';
+import 'package:prince_portfolio/presentation/base/custom_text_widget.dart';
+import 'package:prince_portfolio/presentation/dashboard/bloc/dashboard_bloc_events.dart';
+import 'package:prince_portfolio/presentation/dashboard/bloc/dashboard_bloc_state.dart';
 import 'package:prince_portfolio/presentation/dashboard/components/about_me/about_me.dart';
 import 'package:prince_portfolio/presentation/dashboard/components/contact/contact_me.dart';
 import 'package:prince_portfolio/presentation/dashboard/components/projects/projects.dart';
@@ -8,6 +15,7 @@ import 'package:prince_portfolio/presentation/dashboard/header/dashboard_header.
 import 'package:prince_portfolio/presentation/dashboard/components/user_detail/user_detail.dart';
 import 'package:prince_portfolio/presentation/resources/color_manager.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'bloc/dashboard_bloc.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -21,6 +29,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final ItemScrollController _scrollController = ItemScrollController();
 
   @override
+  void initState() {
+    super.initState();
+    context.read<DashboardBloc>().add(DashboardFetchPortfolioDataEvents());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
@@ -29,24 +43,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
           key: _scaffoldKey,
           backgroundColor: ColorManager.whiteColor(context),
           drawer: DrawerWidget(
-            onMenuButtonPressed: (index) {
-              _closeDrawer();
-              _scrollToIndex(scrollToIndex: index);
-            },
+            onMenuButtonPressed: _scrollToIndex,
           ),
           appBar: DashboardHeader(
-            onMenuButtonPressed: () {
-              _openDrawer();
-            },
-            onOptionClick: (index) {
-              _scrollToIndex(scrollToIndex: index);
-            },
+            onMenuButtonPressed: _openDrawer,
+            onOptionClick: _scrollToIndex,
           ),
-          body: ScrollablePositionedList.builder(
-            itemScrollController: _scrollController,
-            itemCount: dashboardWidgetList.length,
-            itemBuilder: (context, index) {
-              return dashboardWidgetList[index];
+          body: BlocBuilder<DashboardBloc, DashboardBlocState>(
+            builder: (context, state) {
+              if (state is DashboardLoadingBlocState) {
+                return _loadingIndicatorView(context);
+              } else if (state is DashboardSuccessBlocState) {
+                final widgets = _dashboardWidgetList(state.portfolioDataModel);
+                return ScrollablePositionedList.builder(
+                  itemScrollController: _scrollController,
+                  itemCount: widgets.length,
+                  itemBuilder: (context, index) => widgets[index],
+                );
+              } else {
+                return const Center(child: CustomTextWidget(text: 'Error'));
+              }
             },
           ),
         ),
@@ -54,24 +70,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  List<Widget> dashboardWidgetList = [
-    const UserDetail(),
-    AboutMe(),
-    const Projects(),
-    ContactMe(),
-    const MyResume()
-  ];
+  /// **Loading Indicator**
+  Center _loadingIndicatorView(BuildContext context) {
+    return Center(
+      child: CircularProgressIndicator(
+        color: context.watch<ThemeBloc>().state is ThemeBlocStateLight
+            ? Colors.black
+            : Colors.white,
+      ),
+    );
+  }
 
-  void _scrollToIndex({required int scrollToIndex}) {
+  /// **Dashboard Widget List**
+  List<Widget> _dashboardWidgetList(PortfolioDataModel portfolioDataModel) {
+    return [
+      UserDetail(portfolioDataModel: portfolioDataModel),
+      AboutMe(),
+      const Projects(),
+      ContactMe(),
+      const MyResume(),
+    ];
+  }
+
+  /// **Scroll to Section**
+  void _scrollToIndex(int index) {
     _scrollController.scrollTo(
-        index: scrollToIndex, duration: const Duration(seconds: 1));
+      index: index,
+      duration: const Duration(seconds: 1),
+    );
   }
 
-  void _openDrawer() {
-    _scaffoldKey.currentState?.openDrawer();
-  }
-
-  void _closeDrawer() {
-    _scaffoldKey.currentState?.closeDrawer();
-  }
+  /// **Open Drawer**
+  void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
 }
