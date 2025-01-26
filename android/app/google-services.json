@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "93610792688",
+    "project_id": "prince-portfolio-f1d6e",
+    "storage_bucket": "prince-portfolio-f1d6e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93610792688:android:833bfd2da6e6fdb8541435",
+        "android_client_info": {
+          "package_name": "com.example.prince_portfolio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQBKWEEJ9gJL6pWHBjdzMJcQ94ndpD4M0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

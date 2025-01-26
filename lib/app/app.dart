@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prince_portfolio/app/bloc_theme/theme_bloc.dart';
 import 'package:prince_portfolio/app/bloc_theme/thme_bloc_state.dart';
+import 'package:prince_portfolio/presentation/dashboard/bloc/dashboard_bloc.dart';
 import 'package:prince_portfolio/presentation/resources/routes_manager.dart';
 
 class MyApp extends StatefulWidget {
@@ -23,6 +24,9 @@ class _MyAppState extends State<MyApp> {
         providers: [
           BlocProvider(
             create: (context) => ThemeBloc(),
+          ),
+          BlocProvider(
+            create: (context) => DashboardBloc(),
           )
         ],
         child: BlocBuilder<ThemeBloc, ThemeBlocState>(
