@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prince_portfolio/data/portfolio_data_model.dart';
 import 'package:prince_portfolio/presentation/base/custom_text_widget.dart';
 import 'package:prince_portfolio/presentation/dashboard/components/about_me/question_mark_animation.dart';
 import 'package:prince_portfolio/presentation/resources/color_manager.dart';
@@ -7,7 +8,9 @@ import 'package:prince_portfolio/utils/extention_context.dart';
 import 'package:prince_portfolio/utils/responsive.dart';
 
 class AboutMe extends StatelessWidget {
-  AboutMe({super.key});
+  final PortfolioDataModel portfolioDataModel;
+
+  AboutMe({required this.portfolioDataModel, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -109,15 +112,15 @@ class AboutMe extends StatelessWidget {
         const SizedBox(
           height: 20,
         ),
-        const CustomTextWidget(
-          text: StringManager.myInto,
+        CustomTextWidget(
+          text: portfolioDataModel.aboutMeDataModel?.introTitle ?? '',
           fontSize: 24,
         ),
         const SizedBox(
           height: 25,
         ),
-        const CustomTextWidget(
-          text: StringManager.myObjective,
+        CustomTextWidget(
+          text: portfolioDataModel.aboutMeDataModel?.objective ?? '',
           latterSpacing: 2,
           fontSize: 15,
           fontWeight: FontWeight.w200,
@@ -149,11 +152,13 @@ class AboutMe extends StatelessWidget {
   /// This function will return the list of technology
   ///
   Widget _technologyWidget(BuildContext context) {
+    var technologies = (portfolioDataModel.aboutMeDataModel?.technologies ?? []);
+    technologies.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: technologyList.map((item) {
+        children: technologies.map((item) {
           return Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -177,16 +182,4 @@ class AboutMe extends StatelessWidget {
       ),
     );
   }
-
-  ///
-  /// This list will store the list of technology
-  ///
-  final List<String> technologyList = [
-    StringManager.flutter,
-    StringManager.dart,
-    StringManager.git,
-    StringManager.android,
-    StringManager.kotlin,
-    StringManager.firebase,
-  ];
 }

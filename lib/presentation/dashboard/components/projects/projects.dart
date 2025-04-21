@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:prince_portfolio/data/portfolio_data_model.dart';
+import 'package:prince_portfolio/data/projects_data_model.dart';
 import 'package:prince_portfolio/presentation/base/custom_text_widget.dart';
 import 'package:prince_portfolio/presentation/dashboard/components/projects/project_list.dart';
+import 'package:prince_portfolio/presentation/resources/image_manager.dart';
 import 'package:prince_portfolio/presentation/resources/string_manager.dart';
 import 'package:prince_portfolio/utils/app_utills.dart';
 import 'package:prince_portfolio/utils/extention_context.dart';
 
 class Projects extends StatelessWidget {
-  const Projects({super.key});
+  final PortfolioDataModel portfolioDataModel;
+
+  const Projects({required this.portfolioDataModel, super.key});
 
   @override
   Widget build(BuildContext context) {
-    var projectList = ProjectList.projectList;
+    var projectList = portfolioDataModel.projectsDataModel?.projectList ?? [];
     return Padding(
       padding:
           EdgeInsets.symmetric(horizontal: context.width * 0.04, vertical: 25),
@@ -54,10 +59,13 @@ class Projects extends StatelessWidget {
     );
   }
 
-  Widget _projectItemView(ProjectItem project, BuildContext context) {
+  Widget _projectItemView(Map<String, dynamic> project, BuildContext context) {
     return GestureDetector(
       onTap: () {
-        _onProjectClick(project.url);
+        var url = project['url'] ?? '';
+        if (url.isNotEmpty) {
+          _onProjectClick(url);
+        } else {}
       },
       child: Card(
         elevation: 4,
@@ -69,7 +77,7 @@ class Projects extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.asset(
-                  project.image,
+                  ImageManager.imageMedcura,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -85,7 +93,7 @@ class Projects extends StatelessWidget {
                   height: 12,
                 ),
                 CustomTextWidget(
-                  text: project.title,
+                  text: project['title'] ?? '',
                   latterSpacing: 2,
                   fontSize: 24,
                   fontWeight: FontWeight.w700,
@@ -94,7 +102,7 @@ class Projects extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                   child: CustomTextWidget(
-                    text: project.description,
+                    text: project['description'] ?? '',
                     latterSpacing: 2,
                     fontSize: 13,
                     fontWeight: FontWeight.w500,

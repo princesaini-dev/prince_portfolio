@@ -85,8 +85,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   List<Widget> _dashboardWidgetList(PortfolioDataModel portfolioDataModel) {
     return [
       UserDetail(portfolioDataModel: portfolioDataModel),
-      AboutMe(),
-      const Projects(),
+      AboutMe(portfolioDataModel: portfolioDataModel),
+      Projects(portfolioDataModel: portfolioDataModel),
       ContactMe(),
       const MyResume(),
     ];
