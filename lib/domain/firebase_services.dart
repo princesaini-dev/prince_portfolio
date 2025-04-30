@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:prince_portfolio/app/constants.dart';
 import 'package:prince_portfolio/data/portfolio_data_model.dart';
 import 'package:prince_portfolio/data/projects_data_model.dart';
+import 'package:prince_portfolio/domain/database_services.dart';
 import 'package:prince_portfolio/utils/app_logger.dart';
 
 import '../data/about_me_data_model.dart';
@@ -15,6 +16,7 @@ class FirebaseService {
   /// Fetch portfolio data from Firestore.
   ///
   Future<PortfolioDataModel?> getPortfolioData() async {
+    DatabaseServices().getProjectList();
     try {
       DocumentSnapshot aboutSnapshot = await _firestore
           .collection(Constants.portfolioFirestoreKey)
