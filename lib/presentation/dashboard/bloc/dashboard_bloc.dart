@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prince_portfolio/domain/database_services.dart';
 import 'package:prince_portfolio/domain/firebase_services.dart';
 import 'package:prince_portfolio/presentation/dashboard/bloc/dashboard_bloc_events.dart';
 import 'package:prince_portfolio/presentation/dashboard/bloc/dashboard_bloc_state.dart';
+import 'package:prince_portfolio/supabase_client.dart';
 
 class DashboardBloc extends Bloc<DashboardBlocEvents, DashboardBlocState> {
   final FirebaseService _firebaseService = FirebaseService();
@@ -19,7 +21,7 @@ class DashboardBloc extends Bloc<DashboardBlocEvents, DashboardBlocState> {
   Future<void> _actionFetchPortFolioEvent(
       DashboardFetchPortfolioDataEvents event,
       Emitter<DashboardBlocState> emit) async {
-    var result = await _firebaseService.getPortfolioData();
+    var result = await DatabaseServices().getPortfolioData();
     if (result != null) {
       emit(DashboardSuccessBlocState(portfolioDataModel: result));
     }

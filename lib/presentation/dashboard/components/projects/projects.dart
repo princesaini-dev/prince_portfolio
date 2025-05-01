@@ -15,7 +15,7 @@ class Projects extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var projectList = portfolioDataModel.projectsDataModel?.projectList ?? [];
+    var projectList = portfolioDataModel.getProjectList();
     return Padding(
       padding:
           EdgeInsets.symmetric(horizontal: context.width * 0.04, vertical: 25),
@@ -59,12 +59,11 @@ class Projects extends StatelessWidget {
     );
   }
 
-  Widget _projectItemView(Map<String, dynamic> project, BuildContext context) {
+  Widget _projectItemView(ProjectsDataModel project, BuildContext context) {
     return GestureDetector(
       onTap: () {
-        var url = project['url'] ?? '';
-        if (url.isNotEmpty) {
-          _onProjectClick(url);
+        if (project.liveUrl != null && project.liveUrl!.isNotEmpty) {
+          _onProjectClick(project.liveUrl!);
         } else {}
       },
       child: Card(
@@ -76,10 +75,12 @@ class Projects extends StatelessWidget {
               opacity: 0.2,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  ImageManager.imageMedcura,
-                  fit: BoxFit.cover,
-                ),
+                child: project.imageUrl != null && project.imageUrl!.isNotEmpty
+                    ? Image.network(
+                        project.imageUrl!,
+                        fit: BoxFit.fill,
+                      )
+                    : const SizedBox.shrink(),
               ),
             ),
           ),
@@ -93,7 +94,7 @@ class Projects extends StatelessWidget {
                   height: 12,
                 ),
                 CustomTextWidget(
-                  text: project['title'] ?? '',
+                  text: project.title,
                   latterSpacing: 2,
                   fontSize: 24,
                   fontWeight: FontWeight.w700,
@@ -102,7 +103,7 @@ class Projects extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                   child: CustomTextWidget(
-                    text: project['description'] ?? '',
+                    text: project.description,
                     latterSpacing: 2,
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
