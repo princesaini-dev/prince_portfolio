@@ -152,8 +152,9 @@ class AboutMe extends StatelessWidget {
   /// This function will return the list of technology
   ///
   Widget _technologyWidget(BuildContext context) {
-    var technologies = (portfolioDataModel.aboutMeDataModel?.technologies ?? []);
-    technologies.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+    var technologies = portfolioDataModel.technologiesDataModel ?? [];
+    technologies
+        .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -172,7 +173,7 @@ class AboutMe extends StatelessWidget {
                 width: 10,
               ),
               CustomTextWidget(
-                text: item,
+                text: item.name,
                 latterSpacing: 2,
                 fontSize: 14,
               ),

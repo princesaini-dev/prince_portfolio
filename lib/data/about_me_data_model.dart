@@ -1,44 +1,55 @@
 class AboutMeDataModel {
+  final int id;
+  final DateTime createdAt;
   final String fullName;
   final String title;
   final String description;
   final String welcomeText;
   final String introTitle;
   final String objective;
-  final List<String> technologies;
 
   AboutMeDataModel({
+    required this.id,
+    required this.createdAt,
     required this.fullName,
     required this.title,
     required this.description,
     required this.welcomeText,
     required this.introTitle,
     required this.objective,
-    required this.technologies,
   });
 
   factory AboutMeDataModel.fromMap(Map<String, dynamic> data) {
     return AboutMeDataModel(
+      id: data['id'],
+      createdAt: DateTime.parse(data['created_at']),
       fullName: data['full_name'] ?? '',
       title: data['title'] ?? '',
       description: data['description'] ?? '',
       welcomeText: data['welcome_text'] ?? '',
       introTitle: data['intro_title'] ?? '',
       objective: data['objective'] ?? '',
-      technologies: List<String>.from(data['technologies'] ?? []),
     );
   }
 
-  // Convert AboutMeDataModel to a map for serialization
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
+      'id': id,
+      'created_at': createdAt.toIso8601String(),
       'full_name': fullName,
       'title': title,
       'description': description,
       'welcome_text': welcomeText,
       'intro_title': introTitle,
       'objective': objective,
-      'technologies': technologies,
     };
+  }
+
+  static AboutMeDataModel fromList(List<dynamic> list) {
+    if (list.isNotEmpty) {
+      return AboutMeDataModel.fromMap(list.first);
+    } else {
+      throw Exception("About Me list is empty");
+    }
   }
 }

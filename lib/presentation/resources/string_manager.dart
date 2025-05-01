@@ -45,4 +45,10 @@ class StringManager {
   static const String githubUrl = 'https://github.com/princesaini-dev';
   static const String instagramUrl =
       'https://www.instagram.com/princesaini3103/';
+
+  ///
+  /// Firestore remote config keys
+  ///
+  static const String supabaseUrl = 'SUPABASE_URL';
+  static const String supabaseAnanKey = 'SUPABASE_ANON_KEY';
 }
