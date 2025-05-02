@@ -6,17 +6,20 @@ class PortfolioDataModel {
   final AboutMeDataModel? aboutMeDataModel;
   final List<ProjectsDataModel>? projectsDataModel;
   final List<TechnologyDataModel>? technologiesDataModel;
+  final String? resumesURL;
 
   PortfolioDataModel({
     required this.aboutMeDataModel,
     required this.projectsDataModel,
     required this.technologiesDataModel,
+    required this.resumesURL,
   });
 
   factory PortfolioDataModel.fromMap({
     required List<dynamic>? aboutMeList,
     required List<dynamic>? projectsList,
     required List<dynamic>? technologiesList,
+    required List<dynamic>? resumesList,
   }) {
     return PortfolioDataModel(
       aboutMeDataModel: aboutMeList != null && aboutMeList.isNotEmpty
@@ -27,6 +30,9 @@ class PortfolioDataModel {
       technologiesDataModel: technologiesList
           ?.map((item) => TechnologyDataModel.fromMap(item))
           .toList(),
+      resumesURL: resumesList != null && resumesList.isNotEmpty
+          ? resumesList.first['url']
+          : null,
     );
   }
 
