@@ -88,7 +88,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       AboutMe(portfolioDataModel: portfolioDataModel),
       Projects(portfolioDataModel: portfolioDataModel),
       ContactMe(),
-      const MyResume(),
+      MyResume(
+        resumeURL: portfolioDataModel.resumesURL ?? '',
+      ),
     ];
   }
 
