@@ -1,5 +1,6 @@
 import 'package:prince_portfolio/data/about_me_data_model.dart';
 import 'package:prince_portfolio/data/projects_data_model.dart';
+import 'package:prince_portfolio/data/social_media_data_model.dart';
 import 'package:prince_portfolio/data/technology_data_model.dart';
 
 class PortfolioDataModel {
@@ -7,12 +8,14 @@ class PortfolioDataModel {
   final List<ProjectsDataModel>? projectsDataModel;
   final List<TechnologyDataModel>? technologiesDataModel;
   final String? resumesURL;
+  final List<SocialMediaDataModel>? socialMediaDataModel;
 
   PortfolioDataModel({
     required this.aboutMeDataModel,
     required this.projectsDataModel,
     required this.technologiesDataModel,
     required this.resumesURL,
+    required this.socialMediaDataModel,
   });
 
   factory PortfolioDataModel.fromMap({
@@ -20,6 +23,7 @@ class PortfolioDataModel {
     required List<dynamic>? projectsList,
     required List<dynamic>? technologiesList,
     required List<dynamic>? resumesList,
+    required List<dynamic>? socialMediaList,
   }) {
     return PortfolioDataModel(
       aboutMeDataModel: aboutMeList != null && aboutMeList.isNotEmpty
@@ -33,6 +37,9 @@ class PortfolioDataModel {
       resumesURL: resumesList != null && resumesList.isNotEmpty
           ? resumesList.first['url']
           : null,
+      socialMediaDataModel: socialMediaList
+          ?.map((item) => SocialMediaDataModel.fromMap(item))
+          .toList(),
     );
   }
 

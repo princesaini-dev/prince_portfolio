@@ -7,9 +7,9 @@ class MenuItems {
     MenuItem(title: StringManager.about, icon: Icons.person),
     MenuItem(
         title: StringManager.projects, icon: Icons.precision_manufacturing),
+    MenuItem(title: StringManager.resume, icon: Icons.description_outlined),
     MenuItem(title: StringManager.contact, icon: Icons.contact_page_outlined),
     // MenuItem(title: StringManager.blog, icon: Icons.edit_document),
-    MenuItem(title: StringManager.resume, icon: Icons.description_outlined),
   ];
 }
 
