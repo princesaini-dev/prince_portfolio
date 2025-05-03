@@ -7,11 +7,17 @@ class StringManager {
   static const String blog = 'Blog';
   static const String resume = 'Resume';
   static const String darkMode = 'Dark mode';
+  static const String nameValidationError = 'Please enter your name';
+  static const String emailValidationError = 'Please enter your email';
+  static const String subjectValidationError = 'Please enter your subject';
+  static const String messageValidationError = 'Please enter your message';
+  static const String submittedSuccessfully = 'Submitted successfully';
+  static const String someThingWentWrong = 'Something went wrong';
 
   ///
   /// Resume section
   ///
-  static const String downloadResume = 'Download Now';
+  static const String downloadResume = 'Download';
   static const String cancel = 'Cancel';
   static const String resumeAlertTitle = 'Resume';
   static const String resumeAlertDescription =

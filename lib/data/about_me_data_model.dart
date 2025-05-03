@@ -2,6 +2,8 @@ class AboutMeDataModel {
   final int id;
   final DateTime createdAt;
   final String fullName;
+  final String email;
+  final String location;
   final String title;
   final String description;
   final String welcomeText;
@@ -12,6 +14,8 @@ class AboutMeDataModel {
     required this.id,
     required this.createdAt,
     required this.fullName,
+    required this.email,
+    required this.location,
     required this.title,
     required this.description,
     required this.welcomeText,
@@ -24,6 +28,8 @@ class AboutMeDataModel {
       id: data['id'],
       createdAt: DateTime.parse(data['created_at']),
       fullName: data['full_name'] ?? '',
+      email: data['email'] ?? '',
+      location: data['location'] ?? '',
       title: data['title'] ?? '',
       description: data['description'] ?? '',
       welcomeText: data['welcome_text'] ?? '',

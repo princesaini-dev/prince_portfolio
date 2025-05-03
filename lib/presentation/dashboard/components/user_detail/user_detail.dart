@@ -52,18 +52,24 @@ class UserDetail extends StatelessWidget {
   /// **User Information Section**
   Widget _buildUserInfo(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(25),
+      padding: const EdgeInsets.all(35),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildHeader(context),
             const SizedBox(height: 30),
             _buildUserName(context),
             const SizedBox(height: 30),
             _buildUserTitle(context),
-            const SizedBox(height: 80),
+            const SizedBox(height: 40),
+            _buildUserEmail(context),
+            const SizedBox(height: 15),
+            _buildUserLocation(context),
+            const SizedBox(height: 60),
             _buildSocialMediaLinks(context),
+            const SizedBox(height: 60),
           ],
         ),
       ),
@@ -72,17 +78,38 @@ class UserDetail extends StatelessWidget {
 
   /// **Header with Welcome Text & Animation**
   Widget _buildHeader(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          portfolioDataModel.aboutMeDataModel?.welcomeText.toUpperCase() ?? "",
-          style: _textStyle(context,
-              fontSize: 18, letterSpacing: 6, fontWeight: FontWeight.w600),
-        ),
-        const HandWaveAnimation(),
-      ],
-    );
+    var isMobile = Responsive.isMobile(context);
+    if (isMobile) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Text(
+              portfolioDataModel.aboutMeDataModel?.welcomeText.toUpperCase() ??
+                  "",
+              style: _textStyle(context,
+                  fontSize: 18, letterSpacing: 6, fontWeight: FontWeight.w600),
+            ),
+          ),
+          const HandWaveAnimation(),
+        ],
+      );
+    }else{
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            portfolioDataModel.aboutMeDataModel?.welcomeText.toUpperCase() ?? "",
+            style: _textStyle(context,
+                fontSize: 18, letterSpacing: 6, fontWeight: FontWeight.w600),
+          ),
+          const HandWaveAnimation(),
+        ],
+      );
+    }
+
   }
 
   /// **User Name Display**
@@ -91,6 +118,52 @@ class UserDetail extends StatelessWidget {
       portfolioDataModel.aboutMeDataModel?.fullName.toUpperCase() ?? "",
       style: _textStyle(context,
           fontSize: 52, letterSpacing: 2, fontWeight: FontWeight.bold),
+    );
+  }
+
+  /// **User Name Display**
+  Widget _buildUserEmail(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      spacing: 10,
+      children: [
+        Icon(
+          Icons.email_outlined,
+          color: ColorManager.redColor(context),
+          size: 18,
+        ),
+        Flexible(
+          child: Text(
+            portfolioDataModel.aboutMeDataModel?.email ?? "",
+            style: _textStyle(context,
+                fontSize: 16, letterSpacing: 2, fontWeight: FontWeight.w500),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// **User Name Display**
+  Widget _buildUserLocation(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      spacing: 10,
+      children: [
+        Icon(
+          Icons.location_on_outlined,
+          color: ColorManager.redColor(context),
+          size: 18,
+        ),
+        Flexible(
+          child: Text(
+            portfolioDataModel.aboutMeDataModel?.location ?? "",
+            style: _textStyle(context,
+                fontSize: 16, letterSpacing: 2, fontWeight: FontWeight.w500),
+          ),
+        ),
+      ],
     );
   }
 
@@ -105,14 +178,15 @@ class UserDetail extends StatelessWidget {
 
   /// **Social Media Links Section**
   Widget _buildSocialMediaLinks(BuildContext context) {
-    var socialLinks = [];
+    var socialLinks = portfolioDataModel.socialMediaDataModel ?? [];
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: socialLinks.map((link) {
         return Padding(
           padding: EdgeInsets.only(
               right: Responsive.isDesktop(context) ? 80.0 : 30.0),
-          child: _buildSocialMediaButton(context, link.icon, link.url),
+          child: _buildSocialMediaButton(
+              context, link.imageUrl, link.name, link.link),
         );
       }).toList(),
     );
@@ -120,13 +194,22 @@ class UserDetail extends StatelessWidget {
 
   /// **Single Social Media Button**
   Widget _buildSocialMediaButton(
-      BuildContext context, String icon, String url) {
-    return IconButton(
-      hoverColor: ColorManager.blackColor(context).withOpacity(0.5),
-      icon: icon.loadImages(
-          color: ColorManager.blackColor(context), height: 40, width: 40),
-      onPressed: () => AppUtills.loadUrl(url),
-    );
+      BuildContext context, String imageUrl, String name, String link) {
+    if (imageUrl.isNotEmpty) {
+      return InkWell(
+        onTap: () {
+          AppUtills.loadUrl(link);
+        },
+        child: Image.network(
+          imageUrl,
+          color: ColorManager.blackColor(context),
+          height: 40,
+          width: 40,
+        ),
+      );
+    } else {
+      return const SizedBox.shrink();
+    }
   }
 
   /// **Reusable Text Style**

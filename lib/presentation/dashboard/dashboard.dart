@@ -87,10 +87,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       UserDetail(portfolioDataModel: portfolioDataModel),
       AboutMe(portfolioDataModel: portfolioDataModel),
       Projects(portfolioDataModel: portfolioDataModel),
-      ContactMe(),
       MyResume(
         resumeURL: portfolioDataModel.resumesURL ?? '',
       ),
+      ContactMe(),
     ];
   }
 

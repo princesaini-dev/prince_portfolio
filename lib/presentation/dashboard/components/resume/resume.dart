@@ -1,10 +1,8 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:prince_portfolio/domain/database_services.dart';
 import 'package:prince_portfolio/presentation/base/custom_text_widget.dart';
 import 'package:prince_portfolio/presentation/resources/color_manager.dart';
 import 'package:prince_portfolio/presentation/resources/string_manager.dart';
-import 'package:prince_portfolio/supabase_client.dart';
 import 'package:prince_portfolio/utils/app_utills.dart';
 import 'package:prince_portfolio/utils/extention_context.dart';
 import 'package:prince_portfolio/utils/responsive.dart';
