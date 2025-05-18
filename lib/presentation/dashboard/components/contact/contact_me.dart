@@ -24,6 +24,8 @@ class _ContactMeState extends State<ContactMe> {
   String subjectValidationError = '';
   String messageValidationError = '';
 
+  bool isFormSubmiting = false;
+
   @override
   void initState() {
     _nameController = TextEditingController();
@@ -184,6 +186,8 @@ class _ContactMeState extends State<ContactMe> {
   /// This function is used to submit the form.
   ///
   Future<void> _submitForm() async {
+    if (isFormSubmiting) return;
+    isFormSubmiting = true;
     if (_validateForm()) {
       await DatabaseServices().insertContactFormDetail(
           name: _nameController?.text ?? "",
@@ -195,6 +199,7 @@ class _ContactMeState extends State<ContactMe> {
       _subjectController?.clear();
       _messageController?.clear();
     }
+    isFormSubmiting = false;
     setState(() {});
   }
 
