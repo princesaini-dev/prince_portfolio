@@ -1,8 +1,6 @@
-# 🌟 Prince Saini - Flutter Developer
+# 🌟 Prince Saini - Mobile Application Developer
 
 🚀 **Welcome to My Portfolio** 🚀  
-I'm **Prince Saini**, a passionate **Flutter Developer** who loves building interactive and scalable mobile applications.
-
 ---
 
 ## 📌 About Me
