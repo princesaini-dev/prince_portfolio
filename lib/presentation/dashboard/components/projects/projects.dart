@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:prince_portfolio/data/portfolio_data_model.dart';
 import 'package:prince_portfolio/data/projects_data_model.dart';
@@ -76,9 +77,11 @@ class Projects extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: project.imageUrl != null && project.imageUrl!.isNotEmpty
-                    ? Image.network(
-                        project.imageUrl!,
-                        fit: BoxFit.fill,
+                    ? CachedNetworkImage(
+                        imageUrl: project.imageUrl!,
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
                       )
                     : const SizedBox.shrink(),
               ),

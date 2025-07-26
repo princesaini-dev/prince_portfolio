@@ -6,29 +6,31 @@ import 'package:prince_portfolio/utils/app_utills.dart';
 import '../presentation/resources/string_manager.dart';
 
 class DatabaseServices {
-  Future<PortfolioDataModel?> getPortfolioData() async {
+  static Future<Object> getPortfolioData() async {
     try {
-      final technologies =
-          await SupabaseClient.instance.from('technologies').select();
-      final projects = await SupabaseClient.instance.from('projects').select();
-      final aboutMe = await SupabaseClient.instance.from('about_me').select();
-      final resumes = await SupabaseClient.instance.from('resumes').select();
-      final socialMedia =
-          await SupabaseClient.instance.from('social_media').select();
+      // Wait for Supabase to be initialized
+      await SupabaseClient.initializeDatabase();
+      var client = SupabaseClient.instance;
 
-      AppLogger.i(
-          'technologies ::: $technologies \n projects ::: $projects \n aboutMe ::: $aboutMe \n resumes ::: $resumes \n socialMedia ::: $socialMedia');
+      final results = await Future.wait([
+        client.from('technologies').select(),
+        client.from('projects').select(),
+        client.from('about_me').select(),
+        client.from('resumes').select(),
+        client.from('social_media').select(),
+      ]);
 
-      PortfolioDataModel portfolioDataModel = PortfolioDataModel.fromMap(
-          aboutMeList: aboutMe,
-          projectsList: projects,
-          technologiesList: technologies,
-          resumesList: resumes,
-          socialMediaList: socialMedia);
-      return portfolioDataModel;
+      var portfolioData = PortfolioDataModel.fromMap(
+          aboutMeList: results[2],
+          projectsList: results[1],
+          technologiesList: results[0],
+          resumesList: results[3],
+          socialMediaList: results[4]);
+
+      return portfolioData;
     } catch (e) {
-      AppLogger.e('Function getPortfolioData() error: $e');
-      return null;
+      AppLogger.e('Database error: $e');
+      return {};
     }
   }
 

@@ -41,12 +41,10 @@ dependencies:
   url_launcher: ^6.3.0
   scrollable_positioned_list: ^0.3.8
   awesome_dialog: ^3.2.1
-  firebase_core: ^3.10.1
-  cloud_firestore: ^5.6.2
   logger: ^2.5.0
   supabase_flutter: ^2.9.0
-  firebase_remote_config: ^5.4.3
   fluttertoast: ^8.2.12
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:

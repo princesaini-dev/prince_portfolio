@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:prince_portfolio/data/portfolio_data_model.dart';
 import 'package:prince_portfolio/presentation/dashboard/components/user_detail/hand_wave_animation.dart';
@@ -95,13 +96,14 @@ class UserDetail extends StatelessWidget {
           const HandWaveAnimation(),
         ],
       );
-    }else{
+    } else {
       return Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            portfolioDataModel.aboutMeDataModel?.welcomeText.toUpperCase() ?? "",
+            portfolioDataModel.aboutMeDataModel?.welcomeText.toUpperCase() ??
+                "",
             style: _textStyle(context,
                 fontSize: 18, letterSpacing: 6, fontWeight: FontWeight.w600),
           ),
@@ -109,7 +111,6 @@ class UserDetail extends StatelessWidget {
         ],
       );
     }
-
   }
 
   /// **User Name Display**

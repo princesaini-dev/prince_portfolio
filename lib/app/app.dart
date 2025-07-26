@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prince_portfolio/app/bloc_theme/theme_bloc.dart';
-import 'package:prince_portfolio/app/bloc_theme/thme_bloc_state.dart';
-import 'package:prince_portfolio/presentation/dashboard/bloc/dashboard_bloc.dart';
-import 'package:prince_portfolio/presentation/resources/routes_manager.dart';
+import 'package:prince_portfolio/utils/app_logger.dart';
+
+import '../app_root.dart';
+import '../supabase_client.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -18,34 +17,35 @@ class _MyAppState extends State<MyApp> {
     super.didChangeDependencies();
   }
 
+  Future<void> _initializeServices() async {
+    try {
+      await SupabaseClient.initializeDatabase();
+    } catch (error) {
+      AppLogger.e(error);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) => ThemeBloc(),
-          ),
-          BlocProvider(
-            create: (context) => DashboardBloc(),
-          )
-        ],
-        child: BlocBuilder<ThemeBloc, ThemeBlocState>(
-          builder: (context, state) {
-            return MaterialApp(
-              theme: ThemeData(
-                brightness: Brightness.light,
-              ),
-              darkTheme: ThemeData(
-                brightness: Brightness.dark,
-              ),
-              themeMode: state is ThemeBlocStateLight
-                  ? ThemeMode.light
-                  : ThemeMode.dark,
-              debugShowCheckedModeBanner: false,
-              onGenerateRoute: RouteGenerator.getRoute,
-              initialRoute: Routes.dashboardRoute,
-            );
-          },
-        ));
+    return FutureBuilder(
+      future: _initializeServices(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return const AppRoot();
+        } else if (snapshot.hasError) {
+          return MaterialApp(
+            home: Scaffold(
+              body: Center(child: Text('Init Error: ${snapshot.error}')),
+            ),
+          );
+        } else {
+          return const MaterialApp(
+            home: Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            ), // Optional custom loader
+          );
+        }
+      },
+    );
   }
 }
