@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prince_portfolio/app/bloc_theme/theme_bloc.dart';
-import 'package:prince_portfolio/app/bloc_theme/thme_bloc_state.dart';
 import 'package:prince_portfolio/data/portfolio_data_model.dart';
 import 'package:prince_portfolio/presentation/base/custom_text_widget.dart';
+import 'package:prince_portfolio/presentation/base/skeleton_loader.dart';
 import 'package:prince_portfolio/presentation/dashboard/bloc/dashboard_bloc_events.dart';
 import 'package:prince_portfolio/presentation/dashboard/bloc/dashboard_bloc_state.dart';
 import 'package:prince_portfolio/presentation/dashboard/components/about_me/about_me.dart';
@@ -24,59 +23,92 @@ class DashboardScreen extends StatefulWidget {
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _DashboardScreenState extends State<DashboardScreen>
+    with AutomaticKeepAliveClientMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ItemScrollController _scrollController = ItemScrollController();
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
     super.initState();
-    context.read<DashboardBloc>().add(DashboardFetchPortfolioDataEvents());
+
+    // Delay data fetching to improve FCP
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted) {
+          context.read<DashboardBloc>().add(DashboardFetchPortfolioDataEvents());
+        }
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      child: SafeArea(
-        child: Scaffold(
-          key: _scaffoldKey,
-          backgroundColor: ColorManager.whiteColor(context),
-          drawer: DrawerWidget(
-            onMenuButtonPressed: _scrollToIndex,
-          ),
-          appBar: DashboardHeader(
-            onMenuButtonPressed: _openDrawer,
-            onOptionClick: _scrollToIndex,
-          ),
-          body: BlocBuilder<DashboardBloc, DashboardBlocState>(
-            builder: (context, state) {
-              if (state is DashboardLoadingBlocState) {
-                return _loadingIndicatorView(context);
-              } else if (state is DashboardSuccessBlocState) {
-                final widgets = _dashboardWidgetList(state.portfolioDataModel);
-                return ScrollablePositionedList.builder(
-                  itemScrollController: _scrollController,
-                  itemCount: widgets.length,
-                  itemBuilder: (context, index) => widgets[index],
-                );
-              } else {
-                return const Center(child: CustomTextWidget(text: 'Error'));
-              }
-            },
-          ),
-        ),
+    super.build(context);
+
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: ColorManager.whiteColor(context),
+      drawer: DrawerWidget(
+        onMenuButtonPressed: _scrollToIndex,
+      ),
+      appBar: DashboardHeader(
+        onMenuButtonPressed: _openDrawer,
+        onOptionClick: _scrollToIndex,
+      ),
+      body: BlocBuilder<DashboardBloc, DashboardBlocState>(
+        builder: (context, state) {
+          if (state is DashboardLoadingBlocState) {
+            // Show skeleton instead of spinner for better perceived performance
+            return const PortfolioSkeleton();
+          } else if (state is DashboardSuccessBlocState) {
+            return _buildDashboardContent(state.portfolioDataModel);
+          } else {
+            return _buildErrorView();
+          }
+        },
       ),
     );
   }
 
-  /// **Loading Indicator**
-  Center _loadingIndicatorView(BuildContext context) {
+  /// **Optimized Dashboard Content - Prevent Layout Shifts**
+  Widget _buildDashboardContent(PortfolioDataModel portfolioDataModel) {
+    final widgets = _dashboardWidgetList(portfolioDataModel);
+
+    return ScrollablePositionedList.builder(
+      itemScrollController: _scrollController,
+      itemCount: widgets.length,
+      physics: const ClampingScrollPhysics(), // Better web performance
+      itemBuilder: (context, index) {
+        // Wrap each section in RepaintBoundary to prevent unnecessary repaints
+        return RepaintBoundary(
+          key: Key('section_$index'),
+          child: widgets[index],
+        );
+      },
+    );
+  }
+
+  /// **Error View with Retry**
+  Widget _buildErrorView() {
     return Center(
-      child: CircularProgressIndicator(
-        color: context.watch<ThemeBloc>().state is ThemeBlocStateLight
-            ? Colors.black
-            : Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.error_outline, size: 64, color: Colors.red),
+          const SizedBox(height: 16),
+          const CustomTextWidget(text: 'Something went wrong'),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {
+              context.read<DashboardBloc>().add(DashboardFetchPortfolioDataEvents());
+            },
+            child: const Text('Retry'),
+          ),
+        ],
       ),
     );
   }
@@ -90,18 +122,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
       MyResume(
         resumeURL: portfolioDataModel.resumesURL ?? '',
       ),
-      ContactMe(),
+       ContactMe(),
     ];
   }
 
-  /// **Scroll to Section**
+  /// **Optimized Scroll to Section**
   void _scrollToIndex(int index) {
-    _scrollController.scrollTo(
-      index: index,
-      duration: const Duration(seconds: 1),
-    );
+    if (index >= 0 && index < 5) {
+      _scrollController.scrollTo(
+        index: index,
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeOutCubic,
+      );
+    }
   }
 
   /// **Open Drawer**
-  void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
+  void _openDrawer() {
+    _scaffoldKey.currentState?.openDrawer();
+  }
 }
