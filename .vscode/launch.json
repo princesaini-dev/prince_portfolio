@@ -1,0 +1,85 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define=FLAVOR=debug"
+      ]
+    },
+    {
+      "name": "Production",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define=FLAVOR=prod"
+      ]
+    },
+    {
+      "name": "Debug (Chrome)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "-d",
+        "chrome",
+        "--dart-define=FLAVOR=debug"
+      ]
+    },
+    {
+      "name": "Production (Chrome)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "-d",
+        "chrome",
+        "--dart-define=FLAVOR=prod"
+      ]
+    },
+    {
+      "name": "Debug (Android)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define=FLAVOR=debug"
+      ],
+      "deviceId": "android"
+    },
+    {
+      "name": "Production (Android)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define=FLAVOR=prod"
+      ],
+      "deviceId": "android"
+    },
+    {
+      "name": "Debug (iOS)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define=FLAVOR=debug"
+      ],
+      "deviceId": "ios"
+    },
+    {
+      "name": "Production (iOS)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define=FLAVOR=prod"
+      ],
+      "deviceId": "ios"
+    }
+  ]
+}

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prince_portfolio/app/bloc_theme/theme_bloc.dart';
-import 'package:prince_portfolio/app/bloc_theme/thme_bloc_state.dart';
 import 'package:prince_portfolio/data/portfolio_data_model.dart';
-import 'package:prince_portfolio/presentation/base/custom_text_widget.dart';
 import 'package:prince_portfolio/presentation/dashboard/bloc/dashboard_bloc_events.dart';
 import 'package:prince_portfolio/presentation/dashboard/bloc/dashboard_bloc_state.dart';
 import 'package:prince_portfolio/presentation/dashboard/components/about_me/about_me.dart';
@@ -38,70 +35,255 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      child: SafeArea(
-        child: Scaffold(
-          key: _scaffoldKey,
-          backgroundColor: ColorManager.whiteColor(context),
-          drawer: DrawerWidget(
-            onMenuButtonPressed: _scrollToIndex,
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: ColorManager.whiteColor(context),
+        extendBodyBehindAppBar: true,
+        drawer: DrawerWidget(
+          onMenuButtonPressed: _scrollToIndex,
+        ),
+        body: Stack(
+          children: [
+            BlocBuilder<DashboardBloc, DashboardBlocState>(
+              builder: (context, state) {
+                if (state is DashboardLoadingBlocState) {
+                  return _loadingIndicatorView(context);
+                } else if (state is DashboardSuccessBlocState) {
+                  final widgets =
+                      _dashboardWidgetList(state.portfolioDataModel);
+                  return ScrollablePositionedList.builder(
+                    itemScrollController: _scrollController,
+                    itemCount: widgets.length,
+                    physics: const BouncingScrollPhysics(),
+                    itemBuilder: (context, index) => widgets[index],
+                  );
+                } else {
+                  return _errorView(context);
+                }
+              },
+            ),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: DashboardHeader(
+                onMenuButtonPressed: _openDrawer,
+                onOptionClick: _scrollToIndex,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _loadingIndicatorView(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: ColorManager.backgroundGradient(context),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: ColorManager.cardColor(context),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: ColorManager.cardShadow(context),
+              ),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        ColorManager.accentPrimary,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Loading Portfolio...',
+                    style: TextStyle(
+                      color: ColorManager.blackColor(context).withOpacity(0.7),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _errorView(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: ColorManager.backgroundGradient(context),
+      ),
+      child: Center(
+        child: Container(
+          padding: const EdgeInsets.all(32),
+          margin: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: ColorManager.cardColor(context),
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: ColorManager.cardShadow(context),
           ),
-          appBar: DashboardHeader(
-            onMenuButtonPressed: _openDrawer,
-            onOptionClick: _scrollToIndex,
-          ),
-          body: BlocBuilder<DashboardBloc, DashboardBlocState>(
-            builder: (context, state) {
-              if (state is DashboardLoadingBlocState) {
-                return _loadingIndicatorView(context);
-              } else if (state is DashboardSuccessBlocState) {
-                final widgets = _dashboardWidgetList(state.portfolioDataModel);
-                return ScrollablePositionedList.builder(
-                  itemScrollController: _scrollController,
-                  itemCount: widgets.length,
-                  itemBuilder: (context, index) => widgets[index],
-                );
-              } else {
-                return const Center(child: CustomTextWidget(text: 'Error'));
-              }
-            },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.red.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.error_outline_rounded,
+                  color: Colors.red,
+                  size: 48,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Oops! Something went wrong',
+                style: TextStyle(
+                  color: ColorManager.blackColor(context),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Please check your connection and try again',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: ColorManager.blackColor(context).withOpacity(0.6),
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 24),
+              GestureDetector(
+                onTap: () {
+                  context
+                      .read<DashboardBloc>()
+                      .add(DashboardFetchPortfolioDataEvents());
+                },
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                  decoration: BoxDecoration(
+                    gradient: ColorManager.primaryGradient(context),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Text(
+                    'Retry',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  /// **Loading Indicator**
-  Center _loadingIndicatorView(BuildContext context) {
-    return Center(
-      child: CircularProgressIndicator(
-        color: context.watch<ThemeBloc>().state is ThemeBlocStateLight
-            ? Colors.black
-            : Colors.white,
-      ),
-    );
-  }
-
-  /// **Dashboard Widget List**
   List<Widget> _dashboardWidgetList(PortfolioDataModel portfolioDataModel) {
     return [
       UserDetail(portfolioDataModel: portfolioDataModel),
       AboutMe(portfolioDataModel: portfolioDataModel),
       Projects(portfolioDataModel: portfolioDataModel),
-      MyResume(
-        resumeURL: portfolioDataModel.resumesURL ?? '',
-      ),
-      ContactMe(),
+      MyResume(resumeURL: portfolioDataModel.resumesURL ?? ''),
+      const ContactMe(),
+      _buildFooter(context),
     ];
   }
 
-  /// **Scroll to Section**
-  void _scrollToIndex(int index) {
-    _scrollController.scrollTo(
-      index: index,
-      duration: const Duration(seconds: 1),
+  Widget _buildFooter(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 24),
+      decoration: BoxDecoration(
+        color: ColorManager.cardColor(context),
+        border: Border(
+          top: BorderSide(
+            color: ColorManager.blackColor(context).withOpacity(0.05),
+            width: 1,
+          ),
+        ),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  gradient: ColorManager.primaryGradient(context),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.code_rounded,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                'Prince Portfolio',
+                style: TextStyle(
+                  color: ColorManager.blackColor(context),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Built with Flutter & ❤️',
+            style: TextStyle(
+              color: ColorManager.blackColor(context).withOpacity(0.6),
+              fontSize: 14,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '© 2024 All Rights Reserved',
+            style: TextStyle(
+              color: ColorManager.blackColor(context).withOpacity(0.4),
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  /// **Open Drawer**
+  void _scrollToIndex(int index) {
+    if (_scaffoldKey.currentState?.isDrawerOpen ?? false) {
+      Navigator.of(context).pop();
+    }
+    _scrollController.scrollTo(
+      index: index,
+      duration: const Duration(milliseconds: 800),
+      curve: Curves.easeOutCubic,
+    );
+  }
+
   void _openDrawer() => _scaffoldKey.currentState?.openDrawer();
 }
