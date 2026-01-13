@@ -1,0 +1,75 @@
+import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, kIsWeb, TargetPlatform;
+
+/// Default [FirebaseOptions] for use with your Firebase apps.
+class DefaultFirebaseOptions {
+  static FirebaseOptions get currentPlatform {
+    if (kIsWeb) {
+      return web;
+    }
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return android;
+      case TargetPlatform.iOS:
+        return ios;
+      case TargetPlatform.macOS:
+        return macos;
+      case TargetPlatform.windows:
+        return windows;
+      case TargetPlatform.linux:
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for linux - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
+      default:
+        throw UnsupportedError(
+          'DefaultFirebaseOptions are not supported for this platform.',
+        );
+    }
+  }
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyAQBKWEEJ9gJL6pWHBjdzMJcQ94ndpD4M0',
+    appId: '1:93610792688:web:5d09fff5b055d0cc541435',
+    messagingSenderId: '93610792688',
+    projectId: 'prince-portfolio-f1d6e',
+    authDomain: 'prince-portfolio-f1d6e.firebaseapp.com',
+    storageBucket: 'prince-portfolio-f1d6e.firebasestorage.app',
+  );
+
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyAQBKWEEJ9gJL6pWHBjdzMJcQ94ndpD4M0',
+    appId: '1:93610792688:android:833bfd2da6e6fdb8541435',
+    messagingSenderId: '93610792688',
+    projectId: 'prince-portfolio-f1d6e',
+    storageBucket: 'prince-portfolio-f1d6e.firebasestorage.app',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyA__DYP7prCAv5E2tq3xZg0Jg5igJs_NOQ',
+    appId: '1:93610792688:ios:f12615d632f6a634541435',
+    messagingSenderId: '93610792688',
+    projectId: 'prince-portfolio-f1d6e',
+    storageBucket: 'prince-portfolio-f1d6e.firebasestorage.app',
+    iosBundleId: 'com.example.princePortfolio',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyA__DYP7prCAv5E2tq3xZg0Jg5igJs_NOQ',
+    appId: '1:93610792688:ios:f12615d632f6a634541435',
+    messagingSenderId: '93610792688',
+    projectId: 'prince-portfolio-f1d6e',
+    storageBucket: 'prince-portfolio-f1d6e.firebasestorage.app',
+    iosBundleId: 'com.example.princePortfolio',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyAQBKWEEJ9gJL6pWHBjdzMJcQ94ndpD4M0',
+    appId: '1:93610792688:web:6919f0051eeb4b26541435',
+    messagingSenderId: '93610792688',
+    projectId: 'prince-portfolio-f1d6e',
+    authDomain: 'prince-portfolio-f1d6e.firebaseapp.com',
+    storageBucket: 'prince-portfolio-f1d6e.firebasestorage.app',
+  );
+}
